@@ -1,10 +1,12 @@
-import { useState } from "react"
+import { useState } from "react";
+import { ws } from "../sockets/sockets";
 
 export default function User(){
     const [roomId,setRoomId] = useState<string>('');
     const [name,setName] = useState<string>('');
 
     function handleJoinRoom(){
+        ws.send(JSON.stringify({msg : "ewfjweifwejfwj"}))
         alert(`Room Joined! for Room Number ${roomId} with Name : ${name}`);
     }
     return <div> 
