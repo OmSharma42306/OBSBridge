@@ -3,6 +3,10 @@ import User from "./pages/User"
 import Host from "./pages/Host"
 import HostDashboard from "./pages/HostDashboard"
 import UserDashboard from "./pages/UserDashboard"
+import LandingPage from "./pages/landing-page"
+import FeaturesPage from "./pages/features-page"
+import PricingPage from "./pages/pricing-page"
+
 function App() {
   
   return (
@@ -12,6 +16,9 @@ function App() {
       <Route path="/host" element=<Host/>/>
       <Route path="/userDashboard" element=<UserDashboard/>/>
       <Route path="/hostDashboard" element=<HostDashboard/>/>
+      <Route path="/" element={<LandingPage/>}></Route>
+      <Route path="/features" element={<FeaturesPage/>}></Route>
+      <Route path="/pricing" element={<PricingPage/>}></Route>
     </Routes>
       
     </>
