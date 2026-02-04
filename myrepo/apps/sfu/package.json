@@ -2,11 +2,17 @@
   "name": "sfu",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsc -b && node dist/index.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@types/ws": "^8.18.1",
+    "mediasoup": "^3.19.16",
+    "ws": "^8.19.0"
+  }
 }
