@@ -106,10 +106,65 @@ wss.on('connection',function connection(ws : WebSocket){
                 }));
             }
             return;
-        }
+        }else if(msg.type === "consume"){
+            const wsId = msg.wsId;
+            const producerId = msg.producerId;
+            console.log(msg.type,msg.wsId);
+            const rtpCapabilities = msg.rtpCapabilities;
+            const peer = peers.get(wsId);
+            console.log("Peer",peer);
+            const routerConsume = router.canConsume({producerId,rtpCapabilities});
+            
+            if(!routerConsume){
+                ws.send(JSON.stringify({ msg : "Router Cannot Consume!"}));
+                return;
+            }
+
+            const transportEntries = peer?.transports;
+            if(!transportEntries){
+                console.log("Entries not Found!!.");
+                return;
+            } 
+
+            let consumerTransport;
+
+            for(const transportEntry of transportEntries?.values()){
+                if(transportEntry.direction === "recv"){
+                    console.log("final here..");
+                    consumerTransport = transportEntry.transport;
+                }
+            }
+
+            console.log("consumerTransport : ",consumerTransport);
+            if(!consumerTransport){
+                ws.send(JSON.stringify({ msg : "consumer transport not found!"}));
+                return;
+            }
+
+            const consumer = await consumerTransport.consume({ producerId,rtpCapabilities,paused : true});
+            peer.consumers.set(consumer.id,consumer);
+            console.log("consumers list : ",peer.consumers);
+            ws.send(JSON.stringify({ type : "consumerCreated",consumerParams : {
+                id : consumer.id,producerId : consumer.producerId, kind : consumer.kind,rtpParameters : consumer.rtpParameters, transportId : consumerTransport.id
+            }}));
+            return;
+        }else if(msg.type === "resumeConsumer"){
+            const wsId = msg.wsId;
+            const consumerId = msg.consumerId;;
+            const peer = peers.get(wsId);
+            const consumer = peer?.consumers.get(consumerId);
+            await consumer?.resume();
+            await consumer?.requestKeyFrame();
+            ws.send(JSON.stringify({ type : "consumerResumed",consumerId : consumer?.id}));
+            return;
+        };
     })
 
     ws.send(JSON.stringify({ msg : "success",room}));
+    ws.on('close',()=>{
+        console.log("client disconnected...!");
+        return;
+    });
 });
 
 
