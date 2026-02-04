@@ -1,8 +1,9 @@
-import type { Router,Worker,Transport,Consumer,Producer } from "mediasoup/types";
+import type { Router,Transport,Consumer,Producer } from "mediasoup/types";
+import type { WebSocket } from "ws";
 
 export type Peer = {
     socket : WebSocket;
-    transports : Map<string,Transport>
+    transports : Map<string,{transport : Transport,direction : string}>
     producers : Map<string,Producer>
     consumers : Map<string,Consumer>
 };
