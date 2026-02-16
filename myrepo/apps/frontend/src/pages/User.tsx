@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { ws } from "../sockets/sockets";
+import { useNavigate } from "react-router-dom";
 
 export default function User(){
     const [roomId,setRoomId] = useState<string>('');
     const [name,setName] = useState<string>('');
-
+    const navigate = useNavigate();
     function handleJoinRoom(){
-        ws.send(JSON.stringify({msg : "ewfjweifwejfwj"}))
+        ws.send(JSON.stringify({msg : "client-join" , wsId : roomId}))
         alert(`Room Joined! for Room Number ${roomId} with Name : ${name}`);
+        navigate('/userDashboard');
     }
     return <div> 
         <h1>Enter RoomId</h1>

@@ -1,11 +1,15 @@
 import { useState } from "react"
+import { ws } from "../sockets/sockets";
+import { useNavigate } from "react-router-dom";
 
 export default function Host(){
     const [name,setName] = useState("");
     const [roomNumber,setRoomNumber] = useState("");
-
+    const navigate = useNavigate();
     function handleCreateRoom(){
         alert(`Room Created! for Room Number ${roomNumber} with Name : ${name}`);
+        ws.send(JSON.stringify({ type : "client-join" , wsId : roomNumber}))
+        navigate("/hostDashboard",{state : {roomNumber:roomNumber}});
     }
     return <div>
         This is a Host Page..
