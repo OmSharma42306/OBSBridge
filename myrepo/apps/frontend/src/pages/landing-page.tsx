@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Github, Zap, Video, Users, Code, Server, Radio, ExternalLink, Check, X } from 'lucide-react';
+import { Show, SignInButton, SignUpButton, UserButton } from '@clerk/react'
+
 
 interface Feature {
   icon: any;
@@ -129,6 +131,12 @@ export default function LandingPage() {
               <Github className="w-5 h-5" />
               GitHub
             </a>
+            <Show when="signed-out">
+              <SignInButton />
+        </Show>
+        <Show when="signed-in">
+          <UserButton />
+        </Show>
           </nav>
         </div>
       </header>
